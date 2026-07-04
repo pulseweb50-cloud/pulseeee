@@ -22,10 +22,10 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
       with:
-        gradle-version: 8.2
+        gradle-version: 8.7
 
     - name: Build with Gradle System
-      run: gradle assembleDebug
+      run: gradle assembleDebug --no-configuration-cache
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
