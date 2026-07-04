@@ -1,0 +1,6 @@
+{
+  "name": "Pulse",
+  "description": "Pulse is an ultra-fast, secure messenger featuring real-time chats, custom Discord-style presence, secure channel broadcasting, and end-to-end encryption simulation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
