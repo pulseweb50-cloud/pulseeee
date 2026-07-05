@@ -23,17 +23,6 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Set up Gradle
-      uses: gradle/actions/setup-gradle@v4
-      with:
-        gradle-version: 9.3.1
-
-    - name: Regenerate Gradle wrapper (fixes any corrupted gradle-wrapper.jar)
-      run: gradle wrapper --gradle-version 9.3.1 --distribution-type bin
-
-    - name: Grant Execute Permission to Gradle
-      run: chmod +x gradlew
-
     - name: Setup Android SDK Keys
       run: |
         echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
@@ -56,6 +45,17 @@ jobs:
         elif [ ! -f app/google-services.json ]; then
           cp app/google-services.json.example app/google-services.json
         fi
+
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: 9.3.1
+
+    - name: Regenerate Gradle wrapper (fixes any corrupted gradle-wrapper.jar)
+      run: gradle wrapper --gradle-version 9.3.1 --distribution-type bin
+
+    - name: Grant Execute Permission to Gradle
+      run: chmod +x gradlew
 
     - name: Build with Gradle
       run: ./gradlew assembleDebug --no-configuration-cache
