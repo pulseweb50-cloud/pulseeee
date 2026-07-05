@@ -23,28 +23,16 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: 9.3.1
+
+    - name: Regenerate Gradle wrapper (fixes any corrupted gradle-wrapper.jar)
+      run: gradle wrapper --gradle-version 9.3.1 --distribution-type bin
+
     - name: Grant Execute Permission to Gradle
       run: chmod +x gradlew
-      continue-on-error: true
-
-    - name: Verify / repair Gradle wrapper jar
-      run: |
-        set -e
-        DIST_URL=$(grep '^distributionUrl=' gradle/wrapper/gradle-wrapper.properties | cut -d'=' -f2- | sed 's/\\:/:/')
-        if [ -f gradle/wrapper/gradle-wrapper.jar ] && unzip -tq gradle/wrapper/gradle-wrapper.jar >/dev/null 2>&1; then
-          echo "gradle-wrapper.jar is valid"
-        else
-          echo "gradle-wrapper.jar is missing or corrupted - re-downloading from $DIST_URL"
-          ZIP=gradle-dist.zip
-          curl -sSL "$DIST_URL" -o "$ZIP"
-          UNZIP_DIR=$(mktemp -d)
-          unzip -q "$ZIP" -d "$UNZIP_DIR"
-          JAR_PATH=$(find "$UNZIP_DIR" -iname "gradle-wrapper*.jar" | head -n1)
-          mkdir -p gradle/wrapper
-          cp "$JAR_PATH" gradle/wrapper/gradle-wrapper.jar
-          rm -rf "$ZIP" "$UNZIP_DIR"
-          echo "gradle-wrapper.jar repaired"
-        fi
 
     - name: Setup Android SDK Keys
       run: |
